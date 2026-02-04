@@ -1,11 +1,4 @@
-Nice choice 👍 a good README really upgrades your repo.
 
-Here’s a **clean, professional `README.md`** tailored exactly to your **HR Management System (PERN stack + Dark Mode)**.
-You can **copy–paste this directly** into your GitHub repo.
-
----
-
-````md
 # HR Management System (HRMS)
 
 A web-based Human Resource Management System designed to automate and streamline core HR operations such as employee management, recruitment, task tracking, and attendance management, with a strong focus on user experience and accessibility.
