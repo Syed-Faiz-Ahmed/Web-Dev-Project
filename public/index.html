@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daycare Discovery</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card h2 { margin-top: 0; color: #333; }
+        .badge { background: #007bff; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; }
+        .verified { background: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Available Daycares</h1>
+        <div id="daycare-list">Loading...</div>
+    </div>
+
+    <script>
+        async function fetchDaycares() {
+            try {
+                // This calls your backend API
+                const response = await fetch('/daycares?sort=best_match'); 
+                const result = await response.json();
+                
+                const list = document.getElementById('daycare-list');
+                list.innerHTML = '';
+
+                if (result.count === 0) {
+                    list.innerHTML = '<p>No daycares available right now.</p>';
+                    return;
+                }
+
+                result.data.forEach(daycare => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h2>${daycare.name} ${daycare.is_verified ? '<span class="badge verified">Verified</span>' : ''}</h2>
+                        <p><strong>Rating:</strong> ⭐ ${daycare.overall_rating} / 5</p>
+                        <p><strong>Monthly Fee:</strong> $${daycare.monthly_fee}</p>
+                        <p><strong>Available Seats:</strong> <span class="badge">${daycare.available_seats}</span></p>
+                        <p><strong>Ages Accepted:</strong> ${daycare.age_groups_accepted.join(', ')}</p>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('daycare-list').innerHTML = '<p>Error loading daycares.</p>';
+                console.error(error);
+            }
+        }
+
+        fetchDaycares();
+    </script>
+</body>
+</html>
