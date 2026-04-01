@@ -1,107 +1,116 @@
-# Daycare Discovery Platform API
+# Daycare Discovery Platform 🍼🗺️
 
-A robust RESTful API built with Node.js, Express, and PostgreSQL to manage and discover daycare centers.
+A robust, full-stack PERN (PostgreSQL, Express, React, Node.js) web application designed to help parents manage and discover the best daycare centers. The platform features interactive maps, advanced filtering, and a custom "Best Match" sorting algorithm.
 
-## Features
+## 📸 Screenshots
 
-- **CRUD Operations**: Complete management of daycare center records (Create, Read, Update, Delete).
-- **Advanced Filtering**: Filter daycares by minimum/maximum monthly fee, minimum rating, and verification status.
-- **Dynamic Sorting**: Sort results by lowest fee, highest rating, or a custom algorithmic "Best Match" scoring system.
-- **Global Error Handling**: Catch-all mechanism for graceful error responses, including database constraint violations.
 
-## Prerequisites
 
+<div align="center">
+  <img src="./screenshots/home-page.png" alt="Home Page" width="100%"/>
+  <img src="./screenshots/map-view.png" alt="Map View" width="100%"/>
+  <br/>
+  <img src="./screenshots/dashboard.png" alt="User Dashboard" width="100%"/>
+</div>
+
+## ✨ Features
+
+### Frontend (User Interface)
+* **Interactive Maps:** Geospatial discovery of daycares using `react-leaflet`.
+* **Responsive Design:** Fully responsive, modern UI built with `Tailwind CSS`.
+* **Smooth Animations:** Page transitions and micro-interactions powered by `framer-motion`.
+* **Advanced Search & Filter:** Filter by fee, ratings, and verification status in real-time.
+
+### Backend (API & Database)
+* **Secure Authentication:** User auth using `bcrypt` and `jsonwebtoken` (JWT).
+* **Automated Mailing:** Email notifications integrated via `nodemailer`.
+* **Custom Sorting Algorithm:** A `best_match` heuristic that balances normalized pricing and quality ratings.
+* **Global Error Handling:** Catch-all mechanism for graceful database constraint violations.
+
+## 💻 Tech Stack
+
+**Frontend:**
+* React (v18) via Vite
+* Tailwind CSS & PostCSS
+* React Router DOM
+* React Leaflet (Mapping)
+* Framer Motion (Animations)
+* Axios & Lucide React
+
+**Backend:**
+* Node.js & Express.js
+* PostgreSQL (`pg`)
+* JWT & Bcrypt (Auth)
+* Nodemailer
+
+## 🚀 Setup & Installation
+
+### Prerequisites
 - Node.js (v14 or higher)
-- PostgreSQL
+- PostgreSQL installed and running
 
-## Setup & Installation
+### 1. Database Configuration
+1. Create a PostgreSQL database (e.g., `daycare_db`).
+2. Execute the schema file located in `database/schema.sql` to create the necessary tables and indexes.
 
-1. **Clone the repository** (or navigate to the project directory).
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Database Configuration**:
-   - Create a PostgreSQL database (e.g., `daycare_db`).
-   - Execute the schema file located in `database/schema.sql` to create the necessary tables and indexes.
-4. **Environment Variables**:
-   - Ensure you have a `.env` file in the root directory formatted like so:
-     ```env
-     DB_USER=your_postgres_user
-     DB_HOST=localhost
-     DB_NAME=daycare_db
-     DB_PASSWORD=your_postgres_password
-     DB_PORT=5432
-     PORT=3000
-     ```
-5. **Start the server**:
-   ```bash
-   npm start
-   ```
-   *The server will run on `http://localhost:3000` by default.*
+### 2. Backend Setup
+Navigate to the root directory (or backend folder):
+```bash
+# Install dependencies
+npm install
 
-## API Endpoints
+# Create a .env file based on the provided template
+# Add your DB and JWT credentials
+touch .env
 
-### 1. Get All Daycares (with Filtering and Sorting)
-`GET /daycares`
-
-**Query Parameters (Optional):**
-- `min_fee` (number): Minimum monthly fee.
-- `max_fee` (number): Maximum monthly fee.
-- `min_rating` (number): Minimum overall rating (1-5).
-- `is_verified` (boolean): `true` to show only verified daycares.
-- `sort` (string): 
-  - `lowest_fee`: Sorts by total fee ascending.
-  - `highest_rated`: Sorts by rating descending.
-  - `best_match`: Sorts using a custom heuristic (Rating * 0.7 - Normalized Fee * 0.3).
-
-**Example Request:**
-`GET /daycares?min_fee=500&max_fee=1500&sort=best_match`
-
-### 2. Get Daycare by ID
-`GET /daycares/:id`
-
-Retrieves a single daycare by its auto-generated ID.
-
-### 3. Create a Daycare
-`POST /daycares`
-
-**Body (JSON):**
-```json
-{
-  "name": "Sunny Days Childcare",
-  "latitude": 40.7128,
-  "longitude": -74.0060,
-  "monthly_fee": 1200.00,
-  "registration_fee": 150.00,
-  "total_seats": 50,
-  "available_seats": 15,
-  "age_groups_accepted": ["0-2", "3-5"],
-  "overall_rating": 4.8,
-  "is_verified": true
-}
+# Start the backend server (runs on http://localhost:3000 by default)
+npm start
 ```
 
-### 4. Update a Daycare
-`PUT /daycares/:id`
-
-Update specific fields of an existing daycare. You only need to send the fields you wish to modify.
-
-**Body (JSON) Example:**
-```json
-{
-  "available_seats": 10,
-  "monthly_fee": 1250.00
-}
+**Required `.env` variables for Backend:**
+```env
+DB_USER=your_postgres_user
+DB_HOST=localhost
+DB_NAME=daycare_db
+DB_PASSWORD=your_postgres_password
+DB_PORT=5432
+PORT=3000
+JWT_SECRET=your_secret_key
 ```
 
-### 5. Delete a Daycare
-`DELETE /daycares/:id`
+### 3. Frontend Setup
+Open a new terminal and navigate to the `frontend` directory:
+```bash
+cd frontend
 
-Removes a daycare record permanently from the database.
+# Install dependencies
+npm install
 
-## Algorithmic Details
+# Start the Vite development server
+npm run dev
+```
 
-The `GET /daycares` endpoint includes algorithmic query compilation to ensure O(log N) fetching utilizing PostgreSQL indexes.
+## 📡 API Reference
 
-The custom `best_match` sorting algorithm computes a relevance score in-memory (O(K log K) time complexity, where K is the number of filtered records) by balancing normalized pricing and quality ratings.
+### Daycare Endpoints
+* **`GET /daycares`**: Get all daycares. 
+  * *Query Params:* `min_fee`, `max_fee`, `min_rating`, `is_verified`, `sort` (`lowest_fee`, `highest_rated`, `best_match`).
+* **`GET /daycares/:id`**: Retrieve a single daycare.
+* **`POST /daycares`**: Create a new daycare record.
+* **`PUT /daycares/:id`**: Update specific fields of an existing daycare.
+* **`DELETE /daycares/:id`**: Remove a daycare.
+
+## 🧠 Algorithmic Highlights
+
+The platform ensures optimized fetching and sorting:
+* **Query Compilation:** The `GET /daycares` endpoint includes algorithmic query compilation to ensure **O(log N)** fetching utilizing PostgreSQL indexes.
+* **Best Match Sorting:** The custom `best_match` sorting algorithm computes a relevance score in-memory (**O(K log K)** time complexity, where K is the number of filtered records) by balancing normalized pricing and quality ratings: `(Rating * 0.7 - Normalized Fee * 0.3)`.
+
+## 👨‍💻 Author
+
+**Syed Faiz Ahmed** * B.Tech Student, Presidency University 
+* [GitHub Profile](https://github.com/Syed-Faiz-Ahmed) 
+
+---
+*If you like this project, please consider giving it a ⭐!*
+```
