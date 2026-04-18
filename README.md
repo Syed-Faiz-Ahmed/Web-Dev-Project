@@ -108,7 +108,7 @@ The platform ensures optimized fetching and sorting:
 
 ## 👨‍💻 Author
 
-**Syed Faiz Ahmed** * B.Tech Student, Presidency University 
+**Syed Faiz Ahmed** B.Tech Student, Presidency University 
 * [GitHub Profile](https://github.com/Syed-Faiz-Ahmed) 
 
 ---
